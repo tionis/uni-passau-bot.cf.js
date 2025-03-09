@@ -10,9 +10,14 @@
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
+import { getMensaDataForWeek } from "./mensa";
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+		return new Response(JSON.stringify(await getMensaDataForWeek(1)) + "\n", {
+			headers: {
+				"content-type": "application/json",
+			}
+		});
 	},
 } satisfies ExportedHandler<Env>;
