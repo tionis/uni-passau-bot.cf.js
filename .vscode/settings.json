@@ -1,5 +1,18 @@
 {
 	"files.associations": {
 		"wrangler.json": "jsonc"
-	}
+	},
+	"cSpell.words": [
+		"foodtoday",
+		"foodtomorrow",
+		"foodweek",
+		"gast",
+		"kennz",
+		"mensatoday",
+		"mensatomorrow",
+		"mensaweek",
+		"Passau",
+		"preis",
+		"warengruppe"
+	]
 }

@@ -16,7 +16,7 @@ interface MensaEntry {
 }
 
 async function getMensaDataForWeek(week: number): Promise<MensaEntry[]> {
-	// 1. Fetch csv from mansa_base_url + week + ".csv"
+	// 1. Fetch csv from mensa_base_url + week + ".csv"
 	const response_text = await (await fetch(mensa_base_url + week + ".csv")).text();
 	// 2. change encoding from ISO-8859-1 to UTF-8
 	const textEncoder = new TextEncoder();
@@ -40,9 +40,9 @@ async function getMensaDataForWeek(week: number): Promise<MensaEntry[]> {
 			name: line[3],
 			labels: line[4].replace("(", "").replace(")", "").split(","),
 			price: {
-				stud: parseFloat(line[6]),
-				bed: parseFloat(line[7]),
-				gast: parseFloat(line[8]),
+				stud: parseFloat(line[6].replace(",", ".")),
+				bed: parseFloat(line[7].replace(",", ".")),
+				gast: parseFloat(line[8].replace(",", ".")),
 			},
 		};
 		result.push(entry);
@@ -52,3 +52,4 @@ async function getMensaDataForWeek(week: number): Promise<MensaEntry[]> {
 }
 
 export { getMensaDataForWeek };
+export type { MensaEntry, MensaPrice };
