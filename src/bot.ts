@@ -34,17 +34,52 @@ async function getMensaInfo(env: Env, weekNumber: number): Promise<MensaEntry[]>
 		);
 		return data;
 	}
-	return JSON.parse(cached) as MensaEntry[];
+	let parsedData = JSON.parse(cached);
+	parsedData = parsedData.map((entry: any) => {
+		return {
+			date: new Date(entry.date),
+			day: entry.day,
+			category: entry.category,
+			name: entry.name,
+			labels: entry.labels,
+			price: {
+				stud: entry.price.stud,
+				bed: entry.price.bed,
+				gast: entry.price.gast,
+			},
+		};
+	});
+	return parsedData as MensaEntry[];
 }
 
 async function getPrettyMensaInfoForDate(env: Env, date: Date): Promise<string> {
 	const data = await getMensaInfo(env, getISOWeek(date));
-	return "```json\n" + JSON.stringify(data, null, 2) + "\n```";
+	const weekday = date.toLocaleDateString('de-DE', { weekday: 'long' });
+	let prettyData = `*Essen am ${weekday} (${date.toLocaleDateString('de-DE')}):*\n`;
+	const today = new Date();
+	for (const entry of data) {
+		if (entry.date.getDate() === today.getDate()) {
+			prettyData += `*${entry.category}*: ${entry.name} (${entry.price.stud.toFixed(2).replace('.', ',')}€)\n`;
+		}
+	}
+	return prettyData;
 }
 
 async function getPrettyMensaInfoForWeek(env: Env, weekNumber: number): Promise<string> {
 	const data = await getMensaInfo(env, weekNumber);
-	return "```json\n" + JSON.stringify(data, null, 2) + "\n```";
+	const year = getISOWeekYear(new Date());
+	let prettyData = `*Essen für KW${weekNumber} (${year}):*`;
+	let dates = data.map((entry) => entry.date.toISOString().split('T')[0]).filter((value, index, self) => self.indexOf(value) === index).sort();
+	for (const date of dates) {
+		const entries = data.filter((entry) => entry.date.toISOString().split('T')[0] === date);
+		const weekday = entries[0].date.toLocaleDateString('de-DE', { weekday: 'long' });
+		prettyData += `\n*${weekday} (${entries[0].date.toLocaleDateString('de-DE')})*:\n`;
+		for (const entry of entries) {
+			prettyData += `*${entry.category}*: ${entry.name} (${entry.price.stud.toFixed(2).replace('.', ',')}€)\n`;
+		}
+	}
+	console.log(prettyData);
+	return prettyData;
 }
 
 async function handleMessage(env: Env, message: Message) {

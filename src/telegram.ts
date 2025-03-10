@@ -19,6 +19,7 @@ async function tgSendMessage(env: Env, chat_id: number, text: string): Promise<R
 		chat_id: chat_id,
 		text: text,
 		parse_mode: 'Markdown', // MarkdownV2 needs more work with escaping
+		reply_markup: "{\"remove_keyboard\": true}"
 	})
 }
 

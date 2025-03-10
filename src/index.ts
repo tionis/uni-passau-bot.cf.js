@@ -42,7 +42,7 @@ app.get('/webhook/register', async (c) => {
 	// Check that bearer token matches telegram token
 	if (c.req.header('Authorization') === c.env.TELEGRAM_TOKEN) {
 		const url = new URL(c.req.url);
-		const webhookUrl = `${url.protocol}//${url.hostname}${webhook_path}`;
+		const webhookUrl = `https://${url.hostname}${webhook_path}`;
 		const r: any = await (
 			await tgGet(c.env, 'setWebhook', {
 				url: webhookUrl,
