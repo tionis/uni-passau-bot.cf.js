@@ -15,7 +15,10 @@
 			"binding": "UNI_PASSAU_BOT_CACHE",
 			"id": "bf8b31fc21374059b83c0400f0b34e58"
 		}
-	]
+	],
+	"assets": {
+		"directory": "assets"
+	}
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
